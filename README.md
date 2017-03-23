@@ -1,6 +1,7 @@
-# Demo
+# Kubevirt Demo
 
-This demo will set up two vagrant VMs, one is a kubernetes master with kubernetes and kubevirt deployed, the other one
+This demo will set up two vagrant VMs, one is a kubernetes master with
+kubernetes and kubevirt deployed, the other one
 
 ## Getting it up and running
 
@@ -17,14 +18,11 @@ git clone git@github.com:rmohr/kubevirt-vagrant-demo.git
 cd kubevirt-vagrant-demo
 
 # start the environment
+# it will take some time until all pods are ready
 vagrant up
 
 # fetch the kubernetes connection details from the master VM
 cluster/kubectl.sh --init
-
-# it will take some time until all pods are ready
-cluster/kubectl.sh --core get pods --all-namespaces=true
-while [ -n "$(cluster/kubectl.sh --core get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do sleep 10; done
 ```
 
 ## Playing with VMs

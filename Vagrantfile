@@ -25,12 +25,20 @@ Vagrant.configure(2) do |config|
     master.vm.provider :libvirt do |domain|
       domain.memory = 3000
     end
+
+    master.vm.provision "shell", inline: <<-SHELL
+      #!/bin/bash
+      echo -e "\033[0;32m Waiting for Kubevirt to become ready!\033[0m"
+      echo -e "\033[0;32m This can take some time!\033[0m"
+      until kubectl version; do sleep 10; done
+      while [ -n "$(kubectl get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do sleep 10; done
+      echo -e "\033[0;32m Kubevirt is now ready!\033[0m"
+    SHELL
   end
 
   config.vm.define "node0" do |node|
     node.vm.box = "rmohr/kubevirt-node0"
     node.vm.hostname = "node0"
-    puts $master_ip[0..-2] + ($master_ip[-1].to_i + 1).to_s
     node.vm.network "private_network", ip: $master_ip[0..-2] + ($master_ip[-1].to_i + 1).to_s
     node.vm.provider :libvirt do |domain|
       domain.memory = 2048
