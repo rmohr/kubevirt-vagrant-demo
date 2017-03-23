@@ -32,7 +32,7 @@ Now you can create a VM and wait until it is running:
 
 ```bash
 cluster/kubectl.sh create -f cluster/vm.yaml
-cluster/kubectl.sh get vms -o=custom-columns=NAME:metadata.name,PHASE:status.phase,NODE:status.nodeName
+watch cluster/kubectl.sh get vms -o=custom-columns=NAME:metadata.name,PHASE:status.phase,NODE:status.nodeName
 ```
 
 When the VM is running, the VM can be migrated:
