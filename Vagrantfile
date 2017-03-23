@@ -28,11 +28,21 @@ Vagrant.configure(2) do |config|
 
     master.vm.provision "shell", inline: <<-SHELL
       #!/bin/bash
-      echo -e "\033[0;32m Waiting for Kubevirt to become ready!\033[0m"
-      echo -e "\033[0;32m This can take some time!\033[0m"
+      echo "Waiting for Kubevirt to become ready!"
+      echo "This can take some time!"
+      echo ""
+      echo "Waiting for the apiserver to become reachable ..."
       until kubectl version; do sleep 10; done
+      echo "Waiting for all nodes to become ready ..."
+      while [ -n "$(kubectl get nodes --no-headers | grep -v Ready)" ]; do sleep 10; done
+      kubectl get nodes
+      echo "Waiting for all pods to become ready ..."
       while [ -n "$(kubectl get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do sleep 10; done
-      echo -e "\033[0;32m Kubevirt is now ready!\033[0m"
+      kubectl get pods --all-namespaces=true
+      echo ""
+      echo ""
+      echo "Kubevirt is now ready!"
+      echo "Run 'cluster/kubectl.sh --init' to copy the kubectl config to your machine!"
     SHELL
   end
 
