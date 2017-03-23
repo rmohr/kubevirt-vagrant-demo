@@ -1,7 +1,8 @@
 # Kubevirt Demo
 
-This demo will set up two vagrant VMs, one is a kubernetes master with
-kubernetes and kubevirt deployed, the other one
+This demo will set up two vagrant VMs. One is a kubernetes master with
+kubernetes and kubevirt deployed, the other one is a kubernetes node. This
+setup allows you to do live migrations of VMs.
 
 ## Getting it up and running
 
