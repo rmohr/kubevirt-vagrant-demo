@@ -6,7 +6,7 @@
 $master_ip = "192.168.200.2"
 
 Vagrant.configure(2) do |config|
-  # TODO insert default insecure key  
+  # TODO insert default insecure key
   config.ssh.username = "root"
   config.ssh.password = "vagrant"
   config.vm.synced_folder ".", "/demo", :disabled => true
@@ -40,6 +40,9 @@ Vagrant.configure(2) do |config|
       done
       echo "Nodes are ready:"
       kubectl get nodes
+      echo "Work around bug https://github.com/kubernetes/kubernetes/issues/31123: Force a recreate of the discovery pods"
+      kubectl delete pods -n kube-system -l k8s-app=kube-discovery
+      sleep 10
       while [ -n "$(kubectl get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do
           echo "Waiting for all pods to become ready ..."
           kubectl get pods --all-namespaces=true --no-headers | >&2 grep -v Running
