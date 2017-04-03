@@ -33,11 +33,19 @@ Vagrant.configure(2) do |config|
       echo ""
       echo "Waiting for the apiserver to become reachable ..."
       until kubectl version; do sleep 10; done
-      echo "Waiting for all nodes to become ready ..."
-      while [ -n "$(kubectl get nodes --no-headers | grep -v Ready)" ]; do sleep 10; done
+      while [ -n "$(kubectl get nodes --no-headers | grep -v Ready)" ]; do
+         echo "Waiting for all nodes to become ready ..."
+         kubectl get nodes --no-headers | >&2 grep -v Ready
+         sleep 10
+      done
+      echo "Nodes are ready:"
       kubectl get nodes
-      echo "Waiting for all pods to become ready ..."
-      while [ -n "$(kubectl get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do sleep 10; done
+      while [ -n "$(kubectl get pods --all-namespaces=true --no-headers | grep -v Running)" ]; do
+          echo "Waiting for all pods to become ready ..."
+          kubectl get pods --all-namespaces=true --no-headers | >&2 grep -v Running
+          sleep 10
+      done
+      echo "Pods are ready:"
       kubectl get pods --all-namespaces=true
       echo ""
       echo ""
