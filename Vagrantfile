@@ -20,6 +20,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "master" do |master|
     master.vm.box = "rmohr/kubevirt-master"
+    master.vm.box_version = "0.0.1.alpha.4"
     master.vm.hostname = "master"
     master.vm.network "private_network", ip: $master_ip
     master.vm.provider :libvirt do |domain|
@@ -59,6 +60,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.define "node0" do |node|
     node.vm.box = "rmohr/kubevirt-node0"
+    node.vm.box_version = "0.0.1.alpha.4"
     node.vm.hostname = "node0"
     node.vm.network "private_network", ip: $master_ip[0..-2] + ($master_ip[-1].to_i + 1).to_s
     node.vm.provider :libvirt do |domain|
